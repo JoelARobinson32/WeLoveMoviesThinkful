@@ -1,7 +1,10 @@
 # WeLoveMoviesThinkful
 The back end server for the Movie theater application.
 
-## Deployed Backend
+## Front End Example
+![](./src/utils/FrontEnd.png)
+
+## Deployed Back End
 - [Server](https://joelrobinson-movieapp.onrender.com/movies)
 
 ## Available Routes
