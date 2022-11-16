@@ -1,20 +1,23 @@
+const { whereShowing } = require("../movies/movies.service");
 const service = require("./theaters.service");
 
-//List method
-async function list(req, res, next) {
-  const { movieId } = req.params;
-  try {
-    const theaters = await service.list();
-    for (let theater of theaters) {
-      const movies = await service.listMovies(theater.theater_id);
-      theater["movies"] = movies;
+async function list(req, res) {
+    let { movieId } = req.params;
+
+    //checks if there is a movieId
+    if (movieId !== undefined) {
+        res.json({ data: await whereShowing(movieId) });
+    } else {
+        const theaters = await service.list();
+
+        //adds the movies to each theater
+        const theatersWithMovies = theaters.map(async (theater) => {
+            return { ...theater, movies: await service.moviesList(theater) };
+        });
+        const result = await Promise.all(theatersWithMovies);
+
+        res.json({ data: result });
     }
-    res.json({ data: theaters });
-  } catch (error) {
-    next(error);
-  }
 }
 
-module.exports = {
-  list: [list],
-};
+module.exports = { list };

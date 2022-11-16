@@ -1,18 +1,17 @@
 const knex = require("../db/connection");
 
-//List service methods
+//lists all theaters
 function list() {
-  return knex("theaters").select("*");
+    return knex("theaters").select("*");
 }
 
-function listMovies(theaterId) {
-  return knex("movies_theaters")
-    .join("movies", "movies.movie_id", "movies_theaters.movie_id")
-    .where({ theater_id: theaterId })
-    .select("movies.*");
+//gets all the movies for the selected theater
+function moviesList(theater) {
+    return knex("theaters as t")
+        .join("movies_theaters as mt", "t.theater_id", "mt.theater_id")
+        .join("movies as m", "mt.movie_id", "m.movie_id")
+        .select("m.*")
+        .where({ "t.theater_id": theater.theater_id });
 }
 
-module.exports = {
-  list,
-  listMovies,
-};
+module.exports = { list, moviesList };

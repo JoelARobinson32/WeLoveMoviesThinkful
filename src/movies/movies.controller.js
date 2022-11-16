@@ -1,46 +1,43 @@
 const service = require("./movies.service");
 
-
-//Middleware
-async function validateId(req, res, next) {
-  try {
+//checks if the movie exists in the table
+async function movieExists(req, res, next) {
     const { movieId } = req.params;
     const movie = await service.read(movieId);
     if (movie) {
-      res.locals.movie = movie;
-      return next();
+        res.locals.movie = movie;
+        return next();
     }
     next({
-      status: 404,
-      message: "Movie cannot be found.",
+        status: 404,
+        message: "Movie cannot be found.",
     });
-  } catch (error) {
-    next(error);
-  }
 }
 
-//Standard functions
-async function list(req, res, next) {
-  try {
-    const data = await service.list(req.query.is_showing);
-    res.json({ data });
-  } catch (error) {
-    next(error);
-  }
+//pulls a specific movie
+function read(req, res) {
+    res.json({ data: res.locals.movie });
 }
 
-async function read(req, res, next) {
-  try {
-    const { movieId } = req.params;
-    const data = await service.read(movieId);
-    res.json({ data });
-  } catch (error) {
-    next(error);
-  }
+//checks if the is_showing query is in the url
+async function movieIsShowing(req, res, next) {
+    const isShowing = req.query.is_showing;
+    if (isShowing) {
+        res.locals.movies = await service.moviesShowing();
+        // console.log(res.locals.movies);
+        return next();
+    } else {
+        res.locals.movies = await service.list();
+        return next();
+    }
+}
+
+//lists all movies from movies table
+function list(req, res) {
+    res.json({ data: res.locals.movies });
 }
 
 module.exports = {
-  list,
-  read: [validateId, read],
-  validateId,
+    list: [movieIsShowing, list],
+    read: [movieExists, read],
 };
