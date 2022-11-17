@@ -18,11 +18,11 @@ This API can be accessed via:
 - /:reviewId
 
  ### Built with:
- PERN
+ #### PERN
  - PostgreSQL
  - Express
  - REACT
  - Node.js
- As well as
+ #### As well as
  - Knex
  - CORS
