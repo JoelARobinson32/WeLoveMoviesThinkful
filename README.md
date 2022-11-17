@@ -4,6 +4,9 @@ The back end server for the Movie theater application.
 ## Front End Example
 ![](./src/utils/FrontEnd.png)
 
+## Deployed Front End
+- [Client](https://welovemoviesapp.onrender.com/)
+
 ## Deployed Back End
 - [Server](https://joelrobinson-movieapp.onrender.com/movies)
 
